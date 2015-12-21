@@ -14,13 +14,22 @@ type Handler struct {
 // Handles the incoming connection
 func (handler *Handler) handle(conn net.Conn) {
 
+	// Close connection on handler exit
 	defer conn.Close()
 
-	// Read input from connection, keep it open until client exits
+	// Setup scanner which reads connection input
 	scanner := bufio.NewScanner(conn)
 
+	// Loop while input on scanner
 	for scanner.Scan() {
 
-		io.WriteString(conn, handler.processor(scanner.Text()))
+		// Read from network
+		input := scanner.Text()
+
+		// Dispatch processor function and get output
+		output := handler.processor(input)
+
+		// Transmit result to client
+		io.WriteString(conn, output)
 	}
 }
