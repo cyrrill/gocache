@@ -8,20 +8,19 @@ import (
 
 //Handler is a loop dispatcher
 type Handler struct {
-	conn      net.Conn
 	processor func(input string) string
 }
 
 // Handles the incoming connection
-func (handler *Handler) handle() {
+func (handler *Handler) handle(conn net.Conn) {
 
-	defer handler.conn.Close()
+	defer conn.Close()
 
 	// Read input from connection, keep it open until client exits
-	scanner := bufio.NewScanner(handler.conn)
+	scanner := bufio.NewScanner(conn)
 
 	for scanner.Scan() {
 
-		io.WriteString(handler.conn, handler.processor(scanner.Text()))
+		io.WriteString(conn, handler.processor(scanner.Text()))
 	}
 }

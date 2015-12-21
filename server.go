@@ -11,10 +11,11 @@ type Server struct {
 }
 
 // ListenAndDispatch starts connections for a Server
-func (server *Server) ListenAndDispatch(processor func(input string) string) {
+func (server *Server) ListenAndDispatch(handler Handler) {
 
 	// Listen for TCP conncetions on localhost port 9090
 	lt, err := net.Listen(server.net, server.laddr)
+
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -32,7 +33,6 @@ func (server *Server) ListenAndDispatch(processor func(input string) string) {
 		}
 
 		// Delagate to handler
-		handler := Handler{conn: conn, processor: processor}
-		handler.handle()
+		handler.handle(conn)
 	}
 }

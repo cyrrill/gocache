@@ -13,8 +13,11 @@ func main() {
 	// Creates server at given location
 	server := Server{net: "tcp", laddr: ":9090"}
 
+	// Set process() func defined here as the handler's processor
+	handler := Handler{processor: process}
+
 	// Starts conncetion listening loop which it processes with given function
-	server.ListenAndDispatch(process)
+	server.ListenAndDispatch(handler)
 }
 
 // Handles the incoming connection, gets input, returns output
