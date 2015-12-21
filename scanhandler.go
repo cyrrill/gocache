@@ -6,13 +6,13 @@ import (
 	"net"
 )
 
-//Handler is a loop dispatcher
-type Handler struct {
+// ScanHandler is a loop dispatcher
+type ScanHandler struct {
 	processor func(input string) string
 }
 
 // Handles the incoming connection
-func (handler *Handler) handle(conn net.Conn) {
+func (handler ScanHandler) handle(conn net.Conn) {
 
 	// Close connection on handler exit
 	defer conn.Close()

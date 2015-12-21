@@ -14,9 +14,9 @@ func main() {
 	server := Server{net: "tcp", laddr: ":9090"}
 
 	// Set process() func defined here as the handler's processor
-	handler := Handler{processor: process}
+	handler := ScanHandler{processor: process}
 
-	// Starts conncetion listening loop which it processes with given function
+	// Starts connection listening loop which it processes with given handler
 	server.ListenAndDispatch(handler)
 }
 
