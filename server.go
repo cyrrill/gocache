@@ -10,17 +10,21 @@ type Server struct {
 	net, laddr string
 }
 
+// Handler interface defines what can be attached to server
+type Handler interface {
+	handle(conn net.Conn)
+}
+
 // ListenAndDispatch starts connections for a Server
 func (server *Server) ListenAndDispatch(handler Handler) {
 
 	// Listen for TCP conncetions on localhost port 9090
 	lt, err := net.Listen(server.net, server.laddr)
-
 	if err != nil {
 		log.Fatalln(err)
 	}
 
-	// Close conenction when we exit
+	// Close listener on exit
 	defer lt.Close()
 
 	// Continually listen for and accept connections
@@ -32,7 +36,7 @@ func (server *Server) ListenAndDispatch(handler Handler) {
 			log.Fatalln(err)
 		}
 
-		// Delagate to handler
+		// Delegate to handler
 		handler.handle(conn)
 	}
 }
